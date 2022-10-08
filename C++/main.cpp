@@ -17,9 +17,8 @@ struct Edge{
     int u,v,w,pos;
 };
 vector<Edge>krus;
-map<pii,bool>check;
 vector<int>ans;
-bool cmp(Edge a,Edge b){
+bool cmp(const Edge &a,const Edge &b){
     return a.w<b.w;
 }
 int getroot(int u){
@@ -63,7 +62,6 @@ main(){
         ans.push_back(pos);
     }
     for(int i=0;i<ans.size();i++) cout<<ans[i]<<" ";
-
     cout<<endl;
     return 0;
 }
