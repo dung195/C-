@@ -1,0 +1,1 @@
+{"name":"Local: DIOPHANTINE","url":"d:\\C++\\DIOPHANTINE.cpp","tests":[{"id":1657512889824,"input":"2\n2 4 20 \n3 5 16","output":"4\n1"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\C++\\DIOPHANTINE.cpp","group":"local","local":true}
