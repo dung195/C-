@@ -24,7 +24,6 @@ main(){
     for(int i=1;i<=n;i++){
         for(int j=1;j<=m;j++) cin>>bang[i][j];
     }
-    int a;
-    cin>>a;
+    
     return 0;
 }
