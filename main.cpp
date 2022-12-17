@@ -8,39 +8,73 @@ using namespace std;
 #define bs binary_search
 #define int ll
 const ll sized = 1e6;
-const ll N = 1e7;
+const ll N = 1005;
 const ll inf = 1e18;
 const ll MOD = 123456789;
 const ll LOG = 20;
-int bang[sized];
-int st[sized*4+8];
-int la[sized*4+8];
-// void lazy(int id){
-//     st[id]+=la[id];
-//     la[id*2]+=la[id];
-//     la[id*2+1]+=la[id];
-//     la[id]=0;
-// }
-void update(int l,int r,int u,int v, int id){
-    // lazy(id);
-    if(r<u || l>v) return;
-    if(l>=u && r<=v){
-        // la[id]+=(r-l+1-st[id])-st[id];
-        // lazy(id);
-        st[id]+=(r-l+1-st[id])-st[id];
-        return;
+vector<int>graph[sized];
+int p[sized][LOG];
+int h[sized];
+void dfs(int S){
+    for(int i=0;i<graph[S].size();i++){
+        h[graph[S][i]]=h[S]+1;
+        p[graph[S][i]][0]=S;
+        dfs(graph[S][i]);
     }
-    int mid=(l+r)>>1;
-    update(l,mid,u,v,id*2);
-    update(mid+1,r,u,v,id*2+1);
-    st[id]=st[id*2]+st[id*2+1];
 }
-int print(int l,int r,int u,int v,int id){
-    // lazy(id);
-    if(r<u || l>v) return 0;
-    if(l>=u && r<=v) return st[id];
-    int mid=(l+r)>>1;
-    return print(l,mid,u,v,id*2)+print(mid+1,r,u,v,id*2+1);
+int getbit(int a,int i){
+    return (a>>i)&1;
+}
+int lca(int a,int b){
+    if(h[a]<h[b]) swap(a,b);
+    int x=h[a]-h[b];
+    for(int i=LOG;i>=0;i--){
+        if(getbit(x,i)==1) a=p[a][i];
+    }
+    if(a==b) return a;
+    for(int i=LOG-1;i>=0;i--){
+        if(p[a][i]!=p[b][i]){
+            a=p[a][i];
+            b=p[b][i];
+        }
+    }
+    return p[a][0];
+}
+void solve(int cnt){
+    for(int i=0;i<N;i++){
+        h[i]=0;
+        memset(p[i],0,sizeof(p[i]));
+        graph[i].clear();	
+    }
+    int n;
+    cin>>n;
+    for(int i=1;i<=n;i++){
+        int num;
+        cin>>num;
+        for(int i=1;i<=num;i++){
+            int a;
+            cin>>a;
+            graph[i].push_back(a);
+        }
+    }
+    dfs(1);
+    for(int i=1;i<=LOG;i++){
+        for(int j=1;j<=n;j++){
+            p[j][i]=p[p[j][i-1]][i-1];
+        }
+    }
+    int q;
+    cin>>q;
+    vector<int>ans;
+    for(int i=0;i<q;i++){
+        int a,b;
+        cin>>a>>b;
+    	ans.push_back(lca(a,b));
+    }
+    cout<<"Case"<<" "<<cnt<<":"<<endl;
+    for(int i=0;i<cnt;i++){
+        cout<<ans[i]<<endl;
+    }
 }
 main(){
     ios_base::sync_with_stdio(0);
@@ -48,25 +82,10 @@ main(){
     cout.tie(0);
     // freopen("main.inp","r",stdin);
 	// freopen("main.out","w",stdout);
-    int n,m;
-    cin>>n>>m;
-    for(int i=0;i<m;i++){
-        int type;
-        cin>>type;
-        if(type==0){
-            int l,r;
-            cin>>l>>r;
-            update(1,n,l,r,1);
-        }
-        if(type==1){
-            int s,e;
-            cin>>s>>e;
-            cout<<print(1,n,s,e,1)<<endl;
-        }
+    int t;
+    cin>>t;
+    for(int i=1;i<=t;i++){
+        solve(i);
     }
-    for(int i=0;i<n*4+3;i++){
-        cout<<st[i]<<" ";
-    }
-    cout<<endl;
     return 0;
 }
