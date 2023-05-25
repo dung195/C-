@@ -1,1 +1,1 @@
-{"name":"Local: main2","url":"d:\\C++\\main2.cpp","tests":[{"id":1684205873165,"input":"","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\C++\\main2.cpp","group":"local","local":true}
+{"name":"Local: main2","url":"d:\\C++\\main2.cpp","tests":[{"id":1684830140652,"input":"4 5\n1 2 5 2 1\n4 3 1 2 3\n2 3 5 3 1\n3 2 1 1 5\n5\n0 2 1\n1 2 2 3 4\n0 2 4\n1 1 1 1 1\n1 3 2 4 5\n","output":"15\n3\n17\n"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\C++\\main2.cpp","group":"local","local":true}
