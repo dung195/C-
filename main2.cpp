@@ -1,81 +1,67 @@
-#include <bits/stdc++.h>
+#include<bits/stdc++.h>
 using namespace std;
-
 #define ll long long
-#define pb push_back
-#define fi first
-#define se second
-#define endl "\n"
-#define pii pair<int, int>
-
-const int mod = 1e9 + 7;
-const int base = 311;
-const int LIM = 3e5 + 5;
-const int INF = 1e9;
-
-int n, m;
-int trie[LIM][27];
-int nnode = 1;
-string s;
-
-void ins(string s)
-{
-    int c = 1;
-    int len = s.length();
-    for (int i = 0; i < len; i++)
-    {
-        if (trie[c][s[i] - 'a'] == -1)
-        {
-            nnode++;
-            trie[c][s[i] - 'a'] = nnode;
-        }
-        c = trie[c][s[i] - 'a'];
-    }
-    trie[c][26] = 1;
+#define ld long double
+#define pii pair<int,int>
+#define pll pair<ll,ll>
+#define pq priority_queue
+#define bs binary_search
+#define int ll
+const ll sized = 1e6+5;
+const ll N = 1e7;
+const ll inf = 1e18;
+const ll MOD = 123456789;
+const ll LOG = 20;
+int bang[sized];
+vector<int>a;
+map<int,int> dd;
+int n,q;
+void solve(){
+	int l,r;
+	cin>>l>>r;
+	a.clear();
+	for(int i=1;i<=n;i++){
+		if(bang[i]<l || bang[i]>r) continue;
+		a.push_back(bang[i]);
+	}
+	int ans=0;
+	// cerr<<a.size()<<endl;
+	if(a.size()==0) {
+		cout<<0<<endl;
+		return;
+	}
+	for(int i=0;i<a.size()-1;i++){
+		ans+=abs(a[i]-a[i+1]);
+	}
+	cout<<ans<<endl;
 }
-
-int d[LIM];
-
-int dp(int k)
-{
-    if (k == s.size())
-        return 1;
-    if (d[k] != -1)
-        return d[k];
-
-    int ans = 0;
-    int c = 1;
-    for (int i = k; i < s.size(); i++)
-    {
-        if (trie[c][s[i] - 'a'] == -1)
-            break;
-        c = trie[c][s[i] - 'a'];
-        if (trie[c][26] == 1)
-            ans = (ans + dp(i + 1)) % mod;
-    }
-    return d[k] = ans;
+void solve2(){
+	int l,r;
+	cin>>l>>r;
+	
 }
-
-int main()
-{
-    //	freopen("ten.inp", "r", stdin);
-    //	freopen("ten.out", "w", stdout);
-
-    ios::sync_with_stdio(0);
+main(){
+    ios_base::sync_with_stdio(0);
     cin.tie(0);
     cout.tie(0);
-
-    memset(trie, -1, sizeof(trie));
-    memset(d, -1, sizeof(d));
-    cin >> n;
-    for (int i = 1; i <= n; i++)
-    {
-        cin >> s;
-        ins(s);
-    }
-
-    cin >> s;
-    cout << dp(0);
-
+    // freopen("main.inp","r",stdin);
+	// freopen("main.out","w",stdout);
+	cin>>n>>q;
+	int bien=-inf;
+	for(int i=1;i<=n;i++){
+		cin>>bang[i];
+		bien=max(bien,bang[i]);
+		dd[bang[i]]++;
+	}
+	if(n<=5000 && q<=5000){
+		for(int i=0;i<q;i++){
+			solve();
+		}
+	}
+	else{
+		for(int i=0;i<q;i++){
+			solve2();
+		}
+	}
     return 0;
 }

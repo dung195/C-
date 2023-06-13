@@ -1,1 +1,1 @@
-{"name":"Local: main","url":"d:\\C++\\main.cpp","tests":[{"id":1684985993544,"input":"3\na\nb\nab\nabab","output":"4"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\C++\\main.cpp","group":"local","local":true}
+{"name":"Local: main","url":"d:\\C++\\main.cpp","tests":[{"id":1686560844253,"input":"))(())))(","output":""},{"id":1686561362183,"input":"))()(","output":"1 2"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\C++\\main.cpp","group":"local","local":true}

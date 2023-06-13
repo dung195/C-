@@ -12,13 +12,15 @@ const ll N = 1e7;
 const ll inf = 1e18;
 const ll MOD = 123456789;
 const ll LOG = 20;
-
+stack<char>st;
 main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);
     cout.tie(0);
     // freopen("main.inp","r",stdin);
 	// freopen("main.out","w",stdout);
-
+    string s;
+    cin>>s;
+    
     return 0;
 }
