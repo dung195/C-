@@ -1,71 +1,89 @@
-//Dai Ca Di Hoc
-#include <bits/stdc++.h>
-#define sz(x) int(x.size())
-#define reset(x) memset(x, 0,sizeof(x))
-#define Rep(i,n) for(int (i)=0;(i)<(int)(n);++(i))
-#define For(i,l,u) for(int (i)=(int)(l);(i)<=(int)(u);++(i))
-#define MIN(x,y) if (x > (y)) x = (y)
-#define MAX(x,y) if (x < (y)) x = (y)
-#define PB push_back
-#define mp make_pair
-#define F first
-#define S second
-#define maxn 3
-#define MOD 1000000007
-#define remain(x) if (x > MOD) x -= MOD
-#define pii pair<int, int>
-#define Task "tile"
+/**
+ *    author:  AgentPengin ( Độc cô cầu bại )
+ *    created: 23.12.2022 10:08:02
+ *    too lazy to update time
+**/
+#include<bits/stdc++.h>
+
+#define EL '\n'
+#define fi first
+#define se second
+#define NAME "NAME"
+#define ll long long
+#define lcm(a,b) (a/gcd(a,b))*b
+#define db(val) "["#val" = " << (val) << "] "
+#define bend(v) (v).begin(),(v).end()
+#define sz(v) (int)(v).size()
+#define ex exit(0)
+#define int ll
 
 using namespace std;
 
-typedef long long ll;
-typedef long double ld;
+const ll mod = 1e9 + 7;
+const int inf = 0x1FFFFFFF;
+const int N = 1e5 + 5;
 
-struct matrix{
-    int val[maxn][maxn];
-    matrix (){
-        memset(val, 0, sizeof(val));
-    }
-    matrix operator * (const matrix &B){
-        matrix C;
-        for (int i = 1; i <= 2; i++)
-            for (int j = 1; j <= 2; j++)
-            {
-                for (int k = 1; k <= 2; k++)
-                    C.val[i][j] = (C.val[i][j] + (ll)val[i][k] * B.val[k][j]) % MOD;
-            }
-        return C;
-    }
+struct Info {
+	int x,a; 
+	bool operator < (const Info &other) const {
+		return x < other.x;
+	}
+} a[N],b[N];
 
-    matrix POWW(ll x){
-        matrix C;
-        for (int i = 1; i <= 2; i++) C.val[i][i] = 1;
-		
-        if (x == 0) return C;
-        matrix B = POWW(x/2);
-        C = B*B;
-        if (x % 2 == 1) C = C * (*this);
-        return C;
-    }
-};
+int n,k,nn,mm;
 
-int main()
-{
-	ios_base::sync_with_stdio(0); cin.tie(); cout.tie();
-    //freopen(Task".inp", "r", stdin);
-    //freopen(Task".out", "w", stdout);
-    int ntest;
-    ll n;
-    cin >> ntest;
-    while (ntest--){
-        cin >> n;
-        matrix T;
-        T.val[1][1] = 1;
-        T.val[1][2] = 2;
-        T.val[2][1] = 1;
-        matrix B = T.POWW(n);
-        cout << B.val[1][1] << "\n";
-    }
-    return 0;
+int solve1() {
+	if (nn <= 0) return 0;
+	int cur = 0,res = 0,du = 0;
+	sort(a + 1,a + nn + 1);
+	for (int i = nn;i >= 1;i--) {
+		if (du > a[i].a) {
+			du -= a[i].a;
+		} else {
+			a[i].a -= du;
+			int nguyen = a[i].a / k;
+			if (a[i].a % k != 0) nguyen++;
+			du = nguyen * k - a[i].a;
+			res += nguyen * 2 * a[i].x;
+		}
+	}
+	return res;
 }
 
+int solve2() {
+	if (mm <= 0) return 0;
+	for (int i = 1;i <= mm;i++) b[i].x = abs(b[i].x);
+	sort(b + 1,b + mm + 1);
+	int cur = 0,res = 0,du = 0;
+	for (int i = mm;i >= 1;i--) {
+		if (du > b[i].a) {
+			du -= b[i].a;
+		} else {
+			b[i].a -= du;
+			int nguyen = b[i].a / k;
+			if (b[i].a % k != 0) nguyen++;
+			du = nguyen * k - b[i].a;
+			res += nguyen * 2 * b[i].x;
+		}
+	}
+	return res;
+}
+
+signed main() {
+    ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+    if (ifstream(NAME".inp")) {
+        freopen(NAME".inp","r",stdin);
+        freopen(NAME".out","w",stdout);
+    }
+    cin >> n >> k;
+    for (int i = 1;i <= n;i++) {
+		int X,A;
+		cin >> X >> A;
+		if (X > 0) a[++nn] = {X,A};
+		else b[++mm] = {X,A};
+    }
+    cout << solve1() + solve2();
+    
+    return 0;
+}
+// agent pengin wants to take apio (with anya-san)
