@@ -1,89 +1,60 @@
-/**
- *    author:  AgentPengin ( Độc cô cầu bại )
- *    created: 23.12.2022 10:08:02
- *    too lazy to update time
-**/
+/*
+Problem Name: Counting Numbers
+Problem Link: https://cses.fi/problemset/task/2220
+Author: Sachin Srivastava (mrsac7)
+*/
 #include<bits/stdc++.h>
-
-#define EL '\n'
-#define fi first
-#define se second
-#define NAME "NAME"
-#define ll long long
-#define lcm(a,b) (a/gcd(a,b))*b
-#define db(val) "["#val" = " << (val) << "] "
-#define bend(v) (v).begin(),(v).end()
-#define sz(v) (int)(v).size()
-#define ex exit(0)
-#define int ll
-
 using namespace std;
 
-const ll mod = 1e9 + 7;
-const int inf = 0x1FFFFFFF;
-const int N = 1e5 + 5;
+#define int long long
+#define endl '\n'
 
-struct Info {
-	int x,a; 
-	bool operator < (const Info &other) const {
-		return x < other.x;
-	}
-} a[N],b[N];
-
-int n,k,nn,mm;
-
-int solve1() {
-	if (nn <= 0) return 0;
-	int cur = 0,res = 0,du = 0;
-	sort(a + 1,a + nn + 1);
-	for (int i = nn;i >= 1;i--) {
-		if (du > a[i].a) {
-			du -= a[i].a;
-		} else {
-			a[i].a -= du;
-			int nguyen = a[i].a / k;
-			if (a[i].a % k != 0) nguyen++;
-			du = nguyen * k - a[i].a;
-			res += nguyen * 2 * a[i].x;
-		}
-	}
-	return res;
+int xpow(int x, unsigned int y){
+    int res=1;
+    while(y>0){
+        if (y&1) res= (res*x); y=y>>1; x=(x*x);
+    }
+    return res;
 }
 
-int solve2() {
-	if (mm <= 0) return 0;
-	for (int i = 1;i <= mm;i++) b[i].x = abs(b[i].x);
-	sort(b + 1,b + mm + 1);
-	int cur = 0,res = 0,du = 0;
-	for (int i = mm;i >= 1;i--) {
-		if (du > b[i].a) {
-			du -= b[i].a;
-		} else {
-			b[i].a -= du;
-			int nguyen = b[i].a / k;
-			if (b[i].a % k != 0) nguyen++;
-			du = nguyen * k - b[i].a;
-			res += nguyen * 2 * b[i].x;
+int solve(int x) {
+	if (x < 0) return 0;
+	if (x == 0) return 1;
+	int flag = 1;
+	while(flag) {
+		flag = 0;
+		for (int i = log10(x) - 1; i >= 0; i--) {
+			int m = xpow(10, i);
+			if (x/(m*10)%10 == x/m%10) {
+				x = (x/m - 1)*m + (m-1);
+				flag = 1;
+			}
 		}
 	}
-	return res;
+	int n = log10(x)+1;
+	int dp[n+1][2] = {0}; //dp[n][0] = free, dp[n][1] = contrained
+	dp[0][0] = 1, dp[0][1] = 1;
+	int ans = 1;
+	int m = 1;
+	for (int i = 1; i < n; i++, m *= 10) {
+		dp[i][0] = xpow(9, i);
+		dp[i][1] = (x/m%10)*dp[i-1][0] + dp[i-1][1];
+		if (x/m%10 > x/(m*10)%10) dp[i][1] -= dp[i-1][0];
+		ans += dp[i][0];
+	}
+	dp[n][1] = (x/m%10 - 1)*dp[n-1][0] + dp[n-1][1];
+   	return ans + dp[n][1];
+   	
 }
 
-signed main() {
-    ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
-    if (ifstream(NAME".inp")) {
-        freopen(NAME".inp","r",stdin);
-        freopen(NAME".out","w",stdout);
-    }
-    cin >> n >> k;
-    for (int i = 1;i <= n;i++) {
-		int X,A;
-		cin >> X >> A;
-		if (X > 0) a[++nn] = {X,A};
-		else b[++mm] = {X,A};
-    }
-    cout << solve1() + solve2();
+signed main(){
+    ios_base::sync_with_stdio(false);cin.tie(0);cout.tie(0);
+    #ifdef LOCAL
+    //freopen("input.txt", "r" , stdin);
+    //freopen("output.txt", "w", stdout);
+    #endif
     
-    return 0;
+    int x, y; cin>>x>>y;
+    cout<<solve(y) - solve(x-1);
+    
 }
-// agent pengin wants to take apio (with anya-san)
