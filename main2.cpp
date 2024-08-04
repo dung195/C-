@@ -1,60 +1,73 @@
-/*
-Problem Name: Counting Numbers
-Problem Link: https://cses.fi/problemset/task/2220
-Author: Sachin Srivastava (mrsac7)
-*/
 #include<bits/stdc++.h>
 using namespace std;
-
-#define int long long
-#define endl '\n'
-
-int xpow(int x, unsigned int y){
-    int res=1;
-    while(y>0){
-        if (y&1) res= (res*x); y=y>>1; x=(x*x);
+#define ll long long
+#define ld long double
+#define pii pair<int,int>
+#define pll pair<ll,ll>
+#define pq priority_queue
+#define bs binary_search
+#define int ll
+const ll sized = 1e6;
+const ll N = 1e7;
+const ll inf = 1e18;
+const ll MOD = 123456789;
+const ll LOG = 20;
+int bang[sized];
+int st[sized];
+void buildtree(int l,int r,int id){
+    if(l==r){
+        st[id]=bang[l];
+        return;
     }
-    return res;
+    int mid=(l+r)>>1;
+    buildtree(l,mid,id*2);
+    buildtree(mid+1,r,id*2+1);
+    st[id]=max(st[id*2],st[id*2+1]);
 }
-
-int solve(int x) {
-	if (x < 0) return 0;
-	if (x == 0) return 1;
-	int flag = 1;
-	while(flag) {
-		flag = 0;
-		for (int i = log10(x) - 1; i >= 0; i--) {
-			int m = xpow(10, i);
-			if (x/(m*10)%10 == x/m%10) {
-				x = (x/m - 1)*m + (m-1);
-				flag = 1;
-			}
-		}
-	}
-	int n = log10(x)+1;
-	int dp[n+1][2] = {0}; //dp[n][0] = free, dp[n][1] = contrained
-	dp[0][0] = 1, dp[0][1] = 1;
-	int ans = 1;
-	int m = 1;
-	for (int i = 1; i < n; i++, m *= 10) {
-		dp[i][0] = xpow(9, i);
-		dp[i][1] = (x/m%10)*dp[i-1][0] + dp[i-1][1];
-		if (x/m%10 > x/(m*10)%10) dp[i][1] -= dp[i-1][0];
-		ans += dp[i][0];
-	}
-	dp[n][1] = (x/m%10 - 1)*dp[n-1][0] + dp[n-1][1];
-   	return ans + dp[n][1];
-   	
+void update(int l,int r,int u,int v,int val,int id){
+    if(l>v || r<u) return;
+    if(l>=u && r<=v){
+        st[id]=val;
+        return;
+    }
+    int mid=(l+r)>>1;
+    update(l,mid,u,v,val,id*2);
+    update(mid+1,r,u,v,val,id*2+1);
+    st[id]=max(st[id*2],st[id*2+1]);
 }
-
-signed main(){
-    ios_base::sync_with_stdio(false);cin.tie(0);cout.tie(0);
-    #ifdef LOCAL
-    //freopen("input.txt", "r" , stdin);
-    //freopen("output.txt", "w", stdout);
-    #endif
-    
-    int x, y; cin>>x>>y;
-    cout<<solve(y) - solve(x-1);
-    
+int get_max(int l,int r,int u,int v,int id){
+    if(l>v || r<u) return -inf;
+    if(l>=u && r<=v){
+        return st[id];
+    }
+    int mid=(l+r)>>1;
+    return max(get_max(l,mid,u,v,id*2),get_max(mid+1,r,u,v,id*2+1));
+}
+main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+    // freopen("main.inp","r",stdin);
+	// freopen("main.out","w",stdout);
+    int n;
+    cin>>n;
+    for(int i=1;i<=n;i++) cin>>bang[i];
+    buildtree(1,n,1);
+    int q;
+    cin>>q;
+    for(int i=0;i<q;i++){
+        int type;
+        cin>>type;
+        if(type==1){
+            int pos,x;
+            cin>>pos>>x;
+            update(1,n,pos,pos,x,1);
+        }
+        if(type==2){
+            int l,r;
+            cin>>l>>r;
+            cout<<get_max(1,n,l,r,1)<<endl;
+        }
+    }   
+    return 0;
 }
